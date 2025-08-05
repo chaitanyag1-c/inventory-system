@@ -1,0 +1,27 @@
+# Rails
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+/db/*.sqlite3
+/db/*.sqlite3-journal
+/public/assets
+.byebug_history
+*.rbc
+*.sassc
+
+# Node/npm
+node_modules/
+yarn-error.log
+
+# dotenv
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+**/vendor/bundle
+**/vendor/cache
+**/tmp/*
