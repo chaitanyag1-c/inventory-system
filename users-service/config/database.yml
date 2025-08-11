@@ -9,3 +9,7 @@ default: &default
 development:
   <<: *default
   database: users_service_development
+
+test:
+  <<: *default
+  database: users_service_test
