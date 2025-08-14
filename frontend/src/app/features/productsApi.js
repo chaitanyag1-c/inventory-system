@@ -7,7 +7,24 @@ export const productsApi = createApi({
     getProducts: builder.query({
       query: () => 'products',
     }),
+    showProduct: builder.query({
+      query: (id) => `products/${id}`
+    }),
+    addProduct: builder.mutation({
+      query: (Product) =>({
+        url: `/products`,
+        method: 'POST', // PUT is used for updating resources
+        body: Product,
+      })
+    }),
+    updateProduct: builder.mutation({
+      query: (Product) =>({
+        url: `/products/${Product.product.id}`,
+        method: 'PUT', // PUT is used for updating resources
+        body: Product,
+      })
+    })
   }),
 });
 
-export const { useGetProductsQuery } = productsApi;
+export const { useGetProductsQuery,useLazyShowProductQuery,useAddProductMutation,useShowProductQuery,useUpdateProductMutation } = productsApi;
