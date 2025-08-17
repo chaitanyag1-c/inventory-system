@@ -63,7 +63,7 @@ RSpec.describe "Products API", type: :request do
     context 'with invalid params' do
       it 'returns errors and 422' do
         post '/products', params: { product: { name: '' } }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(JSON.parse(response.body)).to have_key('errors')
       end
     end
@@ -83,7 +83,7 @@ RSpec.describe "Products API", type: :request do
     context 'with invalid params' do
       it 'returns errors and 422' do
         put "/products/#{product_id}", params: { product: { name: '' } }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(JSON.parse(response.body)).to have_key('errors')
       end
     end

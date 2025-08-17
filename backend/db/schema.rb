@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_10_174620) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_16_145507) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -26,4 +26,29 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_10_174620) do
     t.index ["deleted_at"], name: "index_products_on_deleted_at"
     t.index ["sku"], name: "index_products_on_sku", unique: true
   end
+
+  create_table "sales_order_lines", force: :cascade do |t|
+    t.bigint "sales_order_id", null: false
+    t.bigint "product_id", null: false
+    t.integer "quantity", default: 1, null: false
+    t.decimal "price", precision: 10, scale: 2, null: false
+    t.decimal "line_total", precision: 10, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_sales_order_lines_on_product_id"
+    t.index ["sales_order_id"], name: "index_sales_order_lines_on_sales_order_id"
+  end
+
+  create_table "sales_orders", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "order_number", null: false
+    t.string "status", default: "pending"
+    t.decimal "total_amount", precision: 10, scale: 2, default: "0.0"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_number"], name: "index_sales_orders_on_order_number", unique: true
+  end
+
+  add_foreign_key "sales_order_lines", "products"
+  add_foreign_key "sales_order_lines", "sales_orders"
 end

@@ -27,9 +27,20 @@ module Backend
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
+# config/application.rb
+config.middleware.insert_before 0, Rack::Cors do
+  allow do
+    origins 'http://localhost:5173' # React dev server URL
+    resource '*',
+             headers: :any,
+             methods: [:get, :post, :put, :patch, :delete, :options, :head],
+             expose: ['Authorization'] # if you want to send JWT back
+  end
+end
+
 
     # Configuration for the application, engines, and railties goes here.
-    #
+    
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #

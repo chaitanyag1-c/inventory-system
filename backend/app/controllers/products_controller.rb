@@ -4,7 +4,17 @@ class ProductsController < ApplicationController
   # GET /products
   def index
     products = Product.all
-    render json: products
+    products = products.where("name ILIKE ?", "%#{params[:search]}%") if params[:search].present?
+    products = products.order(:id).page(params[:page]).per(params[:per_page] || 10)
+
+    render json: {
+      data: products,
+      pagination: {
+        current_page: products.current_page,
+        total_pages: products.total_pages,
+        total_count: products.total_count
+      }
+    }
   end
 
   # GET /products/:id
@@ -18,7 +28,7 @@ class ProductsController < ApplicationController
     if product.save
       render json: product, status: :created
     else
-      render json: { errors: product.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: product.errors.full_messages }, status: :unprocessable_content
     end
   end
 
@@ -27,13 +37,14 @@ class ProductsController < ApplicationController
     if @product.update(product_params)
       render json: @product
     else
-      render json: { errors: @product.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @product.errors.full_messages }, status: :unprocessable_content
     end
   end
 
   # DELETE /products/:id
   def destroy
-    @product.destroy
+    @product.deleted_at = Time.now
+    @product.save!
     head :no_content
   end
 

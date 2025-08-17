@@ -6,7 +6,10 @@ class Product < ApplicationRecord
 
   scope :available, -> { where(deleted_at: nil) }
 
-  def soft_delete
+  def self.soft_delete
     update(deleted_at: Time.current)
+    self.save!
   end
+
+
 end
