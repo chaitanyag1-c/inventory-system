@@ -5,10 +5,10 @@ class UsersController < ApplicationController
   def create
     user = User.new(user_params)
     if user.save
-      token = JwtHelper.encode(user_id: user.id)
-      render json: { token: token, user: user }, status: :created
+      # token = JwtHelper.encode(user_id: user.id)
+      render json: {user: user,success:true}, status: :created
     else
-      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: user.errors.full_messages,success: false }, status: :unprocessable_entity
     end
   end
 
