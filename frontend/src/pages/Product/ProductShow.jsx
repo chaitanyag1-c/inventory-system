@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useLazyShowProductQuery } from '../app/features/productsApi';
+import { useLazyShowProductQuery } from '../../app/features/productsApi';
 import { Card, Col, Row, Spin, Alert, Typography, Button } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 

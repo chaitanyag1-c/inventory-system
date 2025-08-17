@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Button, Form, Input, Spin, Alert } from 'antd';
-import { useShowProductQuery,useUpdateProductMutation } from '../app/features/productsApi';
+import { useShowProductQuery,useUpdateProductMutation } from '../../app/features/productsApi';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const ProductUpdate = () => {

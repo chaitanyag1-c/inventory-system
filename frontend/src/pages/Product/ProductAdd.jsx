@@ -1,14 +1,15 @@
 import React from 'react';
 
 import { Button, Checkbox, Form, Input  } from 'antd';
-import { useAddProductMutation } from '../app/features/productsApi';
+import { useAddProductMutation } from '../../app/features/productsApi';
+import { useNavigate } from 'react-router-dom';
 
 
 
 
 const ProductAdd = () => {
   const [addProduct, { isLoading, isSuccess, isError }] = useAddProductMutation();
-  
+  const navigate = useNavigate()
   const onFinish = async (values) => {
   console.log('Success:', values);
   const {name,description,price,quantity,sku} = values

@@ -1,10 +1,12 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 // import Home from './pages/Home';
-import ProductList from './pages/ProductList';
-import ProductShow from './pages/ProductShow';
-import ProductAdd from './pages/ProductAdd';
-import ProductUpdate from './pages/ProductUpdate';
+import ProductList from './pages/Product/ProductList';
+import ProductShow from './pages/Product/ProductShow';
+import ProductAdd from './pages/Product/ProductAdd';
+import ProductUpdate from './pages/Product/ProductUpdate';
+import SignIn from './pages/Authentication/SignIn';
+import SignUp from './pages/Authentication/SignUp';
 function App() {
   return (
     <Routes>
@@ -13,7 +15,10 @@ function App() {
       <Route path="/products/:id" element={<ProductShow />} />
       <Route path="/product/new" element={<ProductAdd />} />
       <Route path="/products/update/:id" element={<ProductUpdate />} />
+      <Route path ="/signin" element={<SignIn/>} />
+      <Route path ="/signup" element={<SignUp/>} />
 
+      
 
     </Routes>
   );
