@@ -24,13 +24,16 @@ const navigate = useNavigate()
     const body = { email, password, password_confirmation, first_name, last_name };
 
     try {
-      await createSignUp(body).unwrap();
+     const response = await createSignUp(body).unwrap();
       notification.success({
         message: 'Success',
         description: 'Sign Up successful! You can now sign in.',
         placement: 'bottomLeft',
       });
       form.resetFields();
+      navigate('/signin')
+      //localStorage.setItem('token', response.token);
+
     } catch (err) {
       let description = 'Sign-up failed.';
       if (err?.data?.errors) {

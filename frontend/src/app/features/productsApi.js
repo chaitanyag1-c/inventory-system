@@ -2,7 +2,21 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const productsApi = createApi({
   reducerPath: 'productsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/' }), // Your Rails backend URL
+  baseQuery: fetchBaseQuery(
+    { 
+      baseUrl: 'http://localhost:3000/' ,
+      prepareHeaders: (headers) => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+      return headers;
+    },
+
+    }
+
+
+  ), 
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: ({ page = 1, per_page = 10, search = "" }) =>
@@ -12,10 +26,10 @@ export const productsApi = createApi({
       query: (id) => `products/${id}`
     }),
     addProduct: builder.mutation({
-      query: (Product) =>({
+      query: (formData) =>({
         url: `/products`,
         method: 'POST', // PUT is used for updating resources
-        body: Product,
+        body: formData,
       })
     }),
     updateProduct: builder.mutation({
@@ -35,3 +49,20 @@ export const productsApi = createApi({
 });
 
 export const { useGetProductsQuery,useLazyShowProductQuery,useAddProductMutation,useShowProductQuery,useUpdateProductMutation,useDeleteProductMutation } = productsApi;
+
+
+export const api = createApi({
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'http://localhost:3000', // your backend URL
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
+  endpoints: (builder) => ({
+    // your endpoints like getProducts, etc.
+  }),
+});

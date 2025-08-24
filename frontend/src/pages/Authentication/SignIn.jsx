@@ -13,11 +13,13 @@ const navigate = useNavigate()
     try {
       const result = await SignIn(values).unwrap();
       // Handle success: store token, redirect, etc.
+     localStorage.setItem('token', result.token);
       notification.success({
         message: 'Success',
         description: 'Sign in successful!',
         placement: 'bottomLeft',
       });
+      navigate('/')
     } catch (err) {
   let description = 'Sign-in failed.';
   console.log(err)

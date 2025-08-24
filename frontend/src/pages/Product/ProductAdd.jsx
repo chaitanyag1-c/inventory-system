@@ -1,118 +1,91 @@
-import React from 'react';
-
-import { Button, Checkbox, Form, Input  } from 'antd';
+import React, { useState } from 'react';
+import { Button, Form, Input } from 'antd';
 import { useAddProductMutation } from '../../app/features/productsApi';
 import { useNavigate } from 'react-router-dom';
 
-
-
-
 const ProductAdd = () => {
-  const [addProduct, { isLoading, isSuccess, isError }] = useAddProductMutation();
-  const navigate = useNavigate()
-  const onFinish = async (values) => {
-  console.log('Success:', values);
-  const {name,description,price,quantity,sku} = values
-  console.log(name)
-  console.log(description)
+  const [addProduct, { isLoading }] = useAddProductMutation();
+  const navigate = useNavigate();
+  const [imageFile, setImageFile] = useState(null);
 
-  const Product = {
-    "product":{
-        "name": name,
-        "description": description,
-        "price": price,
-        "quantity": quantity,
-        "sku": sku
+  const onFinish = async (values) => {
+    const formData = new FormData();
+    formData.append('product[name]', values.name);
+    formData.append('product[description]', values.description);
+    formData.append('product[price]', values.price);
+    formData.append('product[quantity]', values.quantity);
+    formData.append('product[sku]', values.sku);
+    if (imageFile) {
+      formData.append('product[image_file]', imageFile);
     }
+
+    try {
+      await addProduct(formData).unwrap();
+      console.log('Product created successfully!');
+      navigate('/products');
+    } catch (err) {
+      console.error('Error creating product:', err);
+    }
+    console.log(formData)
   };
-  try
-  {
-    const result = await addProduct(Product).unwrap();
-      console.log('Product updated successfully!');
-  }
-  catch (err) {
-      console.log('Error updating product.');
-    }
-  
-};
-const onFinishFailed = errorInfo => {
-  console.log('Failed:', errorInfo);
-};
-  
+
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
+
   return (
     <div style={{ padding: '30px' }}>
-      {/* Back Button */}
-      <Button 
-        type="default" 
-        
-        onClick={() => navigate(-1)} 
+      <Button
+        type="default"
+        onClick={() => navigate(-1)}
         style={{ marginBottom: '20px' }}
       >
-        🔙Back
+        🔙 Back
       </Button>
 
-     
+      <Form
+        name="product-add"
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 16 }}
+        style={{ maxWidth: 600 }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+      >
+        <Form.Item label="Name" name="name" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
 
-    
-     <Form
-    name="basic"
-    labelCol={{ span: 8 }}
-    wrapperCol={{ span: 16 }}
-    style={{ maxWidth: 600 }}
-    initialValues={{ remember: true }}
-    onFinish={onFinish}
-    onFinishFailed={onFinishFailed}
-    autoComplete="off"
-  >
-    <Form.Item
-      label="Name"
-      name="name"
-      rules={[{ required: true, message: 'Please input your name!' }]}
-    >
-      <Input />
-    </Form.Item>
+        <Form.Item label="Description" name="description" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
 
-    <Form.Item
-      label="Description"
-      name="description"
-      rules={[{ required: true, message: 'Please input your desc!' }]}
-    >
-      <Input />
-    </Form.Item>
+        <Form.Item label="SKU" name="sku" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
 
-        <Form.Item
-      label="sku"
-      name="sku"
-      rules={[{ required: true, message: 'Please input your desc!' }]}
-    >
-      <Input />
-    </Form.Item>
+        <Form.Item label="Price" name="price" rules={[{ required: true }]}>
+          <Input type="number" />
+        </Form.Item>
 
-     <Form.Item
-      label="Price"
-      name="price"
-      rules={[{ required: true, message: 'Please input your desc!' }]}
-    >
-      <Input />
-    </Form.Item>
+        <Form.Item label="Quantity" name="quantity" rules={[{ required: true }]}>
+          <Input type="number" />
+        </Form.Item>
 
-    <Form.Item
-      label="Quantity"
-      name="quantity"
-      rules={[{ required: true, message: 'Please input your desc!' }]}
-    >
-      <Input />
-    </Form.Item>
+        <Form.Item label="Product Image">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={e => setImageFile(e.target.files[0])}
+          />
+        </Form.Item>
 
-    <Form.Item label={null}>
-      <Button type="primary" htmlType="submit">
-        Submit
-      </Button>
-    </Form.Item>
-  </Form>
-     
-
-     
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Button type="primary" htmlType="submit" loading={isLoading}>
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 };

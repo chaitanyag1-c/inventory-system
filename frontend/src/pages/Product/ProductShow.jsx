@@ -47,10 +47,11 @@ const ProductShow = () => {
 
       {!isLoading && !error && product && (
         <Row justify="center">
+          
           <Col xs={24} sm={12} md={8}>
             <Card
               hoverable
-              cover={<img alt={product.name} src= "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7ADN7I0S4vgIJh9bxJ9Bx4WhAGbtVFY5F7w&s" />}
+              cover={<img alt={product.name} src= {product.image_url} />}
               style={{ width: 300, marginTop: 20 }}
             >
               <Title level={2}>{product.name}</Title>
