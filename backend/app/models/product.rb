@@ -5,6 +5,7 @@ class Product < ApplicationRecord
   validates :quantity, numericality: { greater_than_or_equal_to: 0 }
 
   scope :available, -> { where(deleted_at: nil) }
+  has_one_attached :image_file
 
   def self.soft_delete
     update(deleted_at: Time.current)

@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :update, :destroy]
-
+  include Rails.application.routes.url_helpers
   # GET /products
   def index
     products = Product.all
@@ -19,7 +19,10 @@ class ProductsController < ApplicationController
 
   # GET /products/:id
   def show
-    render json: @product
+    product_json = @product.as_json.merge(
+      image_url: @product.image_file.attached? ? url_for(@product.image_file) : nil
+    )
+    render json: product_json
   end
 
   # POST /products
@@ -54,7 +57,11 @@ class ProductsController < ApplicationController
     @product = Product.find(params[:id])
   end
 
-  def product_params
-    params.require(:product).permit(:name, :sku, :description, :price, :quantity)
-  end
+  # def product_params
+  #   params.require(:product).permit(:name, :sku, :description, :price, :quantity,:image_file)
+  # end
+def product_params
+  params.require(:product).permit(:name, :description, :price, :sku, :quantity, :image_file)
+end
+
 end
