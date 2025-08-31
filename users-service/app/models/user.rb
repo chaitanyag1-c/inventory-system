@@ -3,6 +3,7 @@ class User < ApplicationRecord
     validates :email, presence: true, uniqueness: true
     validates :first_name, presence:true
     before_create :generate_full_name
+    before_save :generate_full_name
 
     private
     def generate_full_name
