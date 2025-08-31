@@ -11,6 +11,8 @@ import PrivateRoute from './app/components/PrivateRoute';
 import Navbar from './pages/Common Components/Navbar';
 import Home from './pages/Common Components/Home';
 import ProductCatalogList from './pages/Product/ProductCatalogList';
+import ShowUser from './pages/User/ShowUser';
+import ChangeUserPassword from './pages/User/ChangeUserPassword';
 function App() {
   return (
     <>
@@ -24,6 +26,11 @@ function App() {
       <Route path="/products/:id" element={<ProductShow />} />
       <Route path="/product/new" element={<ProductAdd />} />
       <Route path="/products/update/:id" element={<ProductUpdate />} />
+
+      <Route path="/user_details" element={<ShowUser />} />
+      <Route path="/change_user_password" element={<ChangeUserPassword />} />
+
+
 
 
     </Route>

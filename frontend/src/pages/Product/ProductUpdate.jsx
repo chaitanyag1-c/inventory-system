@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, Spin, Alert } from 'antd';
 import { useShowProductQuery,useUpdateProductMutation } from '../../app/features/productsApi';
 import { useNavigate, useParams } from 'react-router-dom';
+import ImageThumbnail from './ImageThumbail';
 
 const ProductUpdate = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+   const [imageFile, setImageFile] = useState(null);
   const { data: product, isLoading, isError, } = useShowProductQuery(id);
   const [updateProduct, { isLoading: isUpdating, isSuccess, isError: isUpdateError }] = useUpdateProductMutation();
   const [form] = Form.useForm();
@@ -36,10 +38,20 @@ const ProductUpdate = () => {
         id
       },
     };
+    const formData = new FormData();
+    formData.append('product[name]', values.name);
+    formData.append('product[description]', values.description);
+    formData.append('product[price]', values.price);
+    formData.append('product[quantity]', values.quantity);
+    formData.append('product[sku]', values.sku);
+    formData.append('product[id]', id);
+    if (imageFile) {
+      formData.append('product[image_file]', imageFile);
+    }
 
     try {
       // Call your mutation here
-      const result = await updateProduct(Product).unwrap();
+      const result = await updateProduct(formData).unwrap();
       console.log('Product updated successfully!');
     } catch (err) {
       console.log('Error updating product.');
@@ -72,6 +84,10 @@ const ProductUpdate = () => {
           showIcon
         />
       ) : (
+        <>
+         {product?.image_url && (
+            <ImageThumbnail image_url={product.image_url} alt={product.name} />
+          )}
         <Form
           name="productUpdate"
           form={form}
@@ -83,6 +99,7 @@ const ProductUpdate = () => {
           onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
+          
           <Form.Item
             label="Name"
             name="name"
@@ -123,12 +140,21 @@ const ProductUpdate = () => {
             <Input type="number" />
           </Form.Item>
 
+          <Form.Item label="Product Image">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={e => setImageFile(e.target.files[0])}
+                    />
+                  </Form.Item>
+
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Button type="primary" htmlType="submit" loading= {isUpdating}>
               Update Product
             </Button>
           </Form.Item>
         </Form>
+        </>
       )}
     </div>
   );

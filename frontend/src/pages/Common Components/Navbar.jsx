@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, Button, Layout, Dropdown } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-
+import { getUserDetail } from '../../app/utils/user';
 const { Header } = Layout;
 
 const Navbar = () => {
@@ -12,6 +12,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     navigate('/signin');
   };
 
@@ -24,6 +25,21 @@ const Navbar = () => {
       <Menu.Item key="add-product">
         <Link to="/product/new">Add Product</Link>
       </Menu.Item>
+    </Menu>
+  );
+
+    const userMenu = (
+    <Menu>
+      <Menu.Item key="view-details">
+        <Link to="/user_details">View Details</Link>
+      </Menu.Item>
+      <Menu.Item key="change-password">
+        <Link to="/change_user_password">Change Password</Link>
+      </Menu.Item>
+      <Menu.Item key="logout" onClick={handleLogout}>
+        Log Out
+      </Menu.Item>
+
     </Menu>
   );
 
@@ -61,6 +77,13 @@ const Navbar = () => {
                 Products <DownOutlined />
               </Button>
             </Dropdown>
+
+            <Dropdown overlay={userMenu}>
+              <Button type="link">
+               {getUserDetail('name')}  <DownOutlined />
+              </Button>
+            </Dropdown>
+
             <Button danger onClick={handleLogout} style={{ marginLeft: 12 }}>
               Log Out
             </Button>

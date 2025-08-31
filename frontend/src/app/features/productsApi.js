@@ -33,10 +33,10 @@ export const productsApi = createApi({
       })
     }),
     updateProduct: builder.mutation({
-      query: (Product) =>({
-        url: `/products/${Product.product.id}`,
+      query: (formData) =>({
+        url: `/products/${formData.get('product[id]')}`,
         method: 'PUT', // PUT is used for updating resources
-        body: Product,
+        body: formData,
       })
     }),
     deleteProduct: builder.mutation({
@@ -51,18 +51,18 @@ export const productsApi = createApi({
 export const { useGetProductsQuery,useLazyShowProductQuery,useAddProductMutation,useShowProductQuery,useUpdateProductMutation,useDeleteProductMutation } = productsApi;
 
 
-export const api = createApi({
-  baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3000', // your backend URL
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        headers.set('Authorization', `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
-  endpoints: (builder) => ({
-    // your endpoints like getProducts, etc.
-  }),
-});
+// export const api = createApi({
+//   baseQuery: fetchBaseQuery({
+//     baseUrl: 'http://localhost:3000', // your backend URL
+//     prepareHeaders: (headers) => {
+//       const token = localStorage.getItem('token');
+//       if (token) {
+//         headers.set('Authorization', `Bearer ${token}`);
+//       }
+//       return headers;
+//     },
+//   }),
+//   endpoints: (builder) => ({
+//     // your endpoints like getProducts, etc.
+//   }),
+// });

@@ -14,6 +14,7 @@ const navigate = useNavigate()
       const result = await SignIn(values).unwrap();
       // Handle success: store token, redirect, etc.
      localStorage.setItem('token', result.token);
+     localStorage.setItem('user', JSON.stringify(result.user));
       notification.success({
         message: 'Success',
         description: 'Sign in successful!',

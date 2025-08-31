@@ -1,17 +1,25 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const authApi = createApi({
-  reducerPath: 'authApi', // changed from productsApi to authApi for clarity
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3001/' }), // Your Rails backend URL
+  reducerPath: 'authApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'http://localhost:3001/',
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
   endpoints: (builder) => ({
     signUp: builder.mutation({
       query: (body) => ({
         url: '/signup',
         method: 'POST',
-        body: body
+        body,
       }),
     }),
-
     signIn: builder.mutation({
       query: (signInParams) => ({
         url: '/login',
@@ -19,7 +27,26 @@ export const authApi = createApi({
         body: signInParams,
       }),
     }),
+    userDetails: builder.query({
+      query: () => `me`,
+    }),
+    updateUser: builder.mutation({
+      query: (body) => ({
+        url: '/update',
+        method: 'PUT',
+        body,
+      }),
+    }),
+    updateUserPassword: builder.mutation({
+      query: (body) => ({
+        url: '/update_password',
+        method: 'PUT',
+        body,
+      }),
+    }),
+
   }),
 });
 
-export const { useSignInMutation, useSignUpMutation } = authApi;
+// Export hooks
+export const { useSignInMutation, useSignUpMutation, useUserDetailsQuery, useUpdateUserMutation,useUpdateUserPasswordMutation } = authApi;

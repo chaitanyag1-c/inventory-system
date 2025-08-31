@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button, Card, Typography, Row, Col, Space } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
-
+import { getUserDetail } from '../../app/utils/user';
 const { Title, Text } = Typography;
 
 const Home = () => {
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
-
+ const userName = () => getUserDetail('name');
   return (
     <Row
       style={{
@@ -35,7 +35,7 @@ const Home = () => {
 
           <div style={{ margin: '36px 0 16px' }}>
             <Text style={{ fontSize: 16 }}>
-              Welcome to MyInventory! Track, manage, and secure your products with ease using our microservices-powered backend and modern UI.
+              Welcome { userName()  } ! Track, manage, and secure your products with ease using our microservices-powered backend and modern UI.
             </Text>
           </div>
 
@@ -44,14 +44,14 @@ const Home = () => {
               <Button
                 type="primary"
                 size="large"
-                onClick={() => navigate('/sign-in')}
+                onClick={() => navigate('/signin')}
               >
                 Sign In
               </Button>
               <Button
                 type="default"
                 size="large"
-                onClick={() => navigate('/sign-up')}
+                onClick={() => navigate('/signup')}
               >
                 Sign Up
               </Button>
